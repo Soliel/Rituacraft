@@ -7,6 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -14,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
@@ -41,7 +44,26 @@ public class BlockRunePress extends Block {
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         final TileEntityRunePress tile = (TileEntityRunePress) worldIn.getTileEntity(pos);
+        ItemStack item = player.getHeldItem(handIn);
+
         if(tile != null) {
+            if(item != ItemStack.EMPTY) {
+                ItemStack insertResult = tile.insertItem(item, true);
+                if(insertResult != item) {
+                    tile.insertItem(item.split(1), false);
+                    return ActionResultType.SUCCESS;
+                }
+            }
+
+            if(player.isSneaking()) {
+                if(tile.hasResultItem()) {
+                    ItemHandlerHelper.giveItemToPlayer(player, tile.grabResultItem());
+                } else {
+                    ItemHandlerHelper.giveItemToPlayer(player, tile.grabMaterialItem());
+                }
+                return ActionResultType.SUCCESS;
+            }
+
             if(tile.addCharge()) {
                 return ActionResultType.SUCCESS;
             }

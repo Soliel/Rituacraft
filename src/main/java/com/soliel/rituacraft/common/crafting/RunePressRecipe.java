@@ -1,7 +1,9 @@
 package com.soliel.rituacraft.common.crafting;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -10,6 +12,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
@@ -51,46 +55,40 @@ public class RunePressRecipe implements IRecipe<IInventory> {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return null;
+        return RegistryRecipes.RUNE_PRESS_SERIALIZER.get();
     }
 
     @Override
     public IRecipeType<?> getType() {
-        return null;
+        return RegistryRecipes.RUNE_PRESS_RECIPE;
     }
 
-    class RunePressSerializer implements IRecipeSerializer<RunePressRecipe> {
+    static class RunePressSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RunePressRecipe> {
 
         @Override
         public RunePressRecipe read(ResourceLocation recipeId, JsonObject json) {
-            return null;
+            JsonElement material = json.get("material");
+            JsonObject result = json.getAsJsonObject("result");
+
+            Ingredient matIngredient = CraftingHelper.getIngredient(material);
+            ItemStack resStack = CraftingHelper.getItemStack(result, false);
+
+            return new RunePressRecipe(matIngredient, resStack, recipeId);
         }
 
         @Nullable
         @Override
         public RunePressRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            return null;
+            Ingredient mat = Ingredient.read(buffer);
+            ItemStack res = buffer.readItemStack();
+
+            return new RunePressRecipe(mat, res, recipeId);
         }
 
         @Override
         public void write(PacketBuffer buffer, RunePressRecipe recipe) {
-
-        }
-
-        @Override
-        public IRecipeSerializer<?> setRegistryName(ResourceLocation name) {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getRegistryName() {
-            return null;
-        }
-
-        @Override
-        public Class<IRecipeSerializer<?>> getRegistryType() {
-            return null;
+            recipe.material.write(buffer);
+            buffer.writeItemStack(recipe.result);
         }
     }
 }

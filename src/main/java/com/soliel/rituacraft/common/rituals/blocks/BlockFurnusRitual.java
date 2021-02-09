@@ -16,6 +16,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
@@ -67,9 +68,9 @@ public class BlockFurnusRitual extends Block {
         if (ritualTile == null) return ActionResultType.SUCCESS;
 
         if(player.isSneaking()) {
-            player.inventory.addItemStackToInventory(ritualTile.extractFromInputSlot(64));
+            ItemHandlerHelper.giveItemToPlayer(player, ritualTile.extractFromInputSlot(64));
         } else {
-            player.inventory.addItemStackToInventory(ritualTile.extractFromOutputSlot(64));
+            ItemHandlerHelper.giveItemToPlayer(player, ritualTile.extractFromOutputSlot(64));
         }
 
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);

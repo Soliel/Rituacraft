@@ -1,0 +1,9 @@
+{
+  "type": "rituacraft:rune_press",
+  "material": {
+    "item": "minecraft:gold_ingot"
+  },
+  "result": {
+    "item": "rituacraft:rune_energy_depowered"
+  }
+}

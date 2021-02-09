@@ -13,5 +13,5 @@ public class RegistryRecipes {
     //HAHA NO DEFERRED REGISTER FOR THIS JUST BREAK MY PATTERN HAHA
     public static IRecipeType<RunePressRecipe> RUNE_PRESS_RECIPE = IRecipeType.register("rituacraft:rune_press");
 
-    public static RegistryObject<IRecipeSerializer<RunePressRecipe>> RUNE_PRESS_SERIALIZER = RECIPE_SERIALIZERS.register("rune_press", )
+    public static RegistryObject<IRecipeSerializer<RunePressRecipe>> RUNE_PRESS_SERIALIZER = RECIPE_SERIALIZERS.register("rune_press", RunePressRecipe.RunePressSerializer::new);
 }

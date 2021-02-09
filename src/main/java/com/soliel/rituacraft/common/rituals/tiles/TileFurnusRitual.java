@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileFurnusRitual extends TileEntity implements ITickableTileEntity {
-    private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(this::createItemHandler);
     private final ItemStackHandler furnusInventory = createItemHandler();
+    private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> furnusInventory);
 
     private IRecipe<IInventory> activeRecipe;
     private IInventory workingInventory;

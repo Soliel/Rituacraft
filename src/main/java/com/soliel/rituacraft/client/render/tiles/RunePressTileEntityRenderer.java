@@ -9,21 +9,27 @@ import com.soliel.rituacraft.client.render.VertexContext;
 import com.soliel.rituacraft.common.tile.TileEntityRunePress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class RunePressTileEntityRenderer extends TileEntityRenderer<TileEntityRunePress> {
     public static final ResourceLocation RUNE_PRESS_TEX = new ResourceLocation(Rituacraft.MODID, "block/rune_press");
 
+
     private final GeometryCube   pressCube = setupPressCube();
     private final GeometryCube   pressShaft = setupPressShaft();
     private final GeometryCube[] crankCubes = setupCrank();
+    private final float itemRenderScale = 1.0f/1.2f;
 
     public RunePressTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
@@ -59,12 +65,26 @@ public class RunePressTileEntityRenderer extends TileEntityRenderer<TileEntityRu
         pressCube.renderCube(context, this::addVertex);
         pressShaft.renderCube(context, this::addVertex);
 
+        matrixStackIn.push();
         matrixStackIn.translate(0.5f, 0.5f, 0.5f);
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(angle));
         matrixStackIn.translate(-.5f, -.5f, -.5f);
 
         for(GeometryCube cube : crankCubes) {
             cube.renderCube(context, this::addVertex);
+        }
+
+        matrixStackIn.pop();
+
+        ItemStack inputItem = tileEntityIn.getCurrentInputItem();
+        ItemStack outputItem = tileEntityIn.getCurrentOutputItem();
+
+        if(!inputItem.isEmpty()) {
+            renderItem(context, inputItem, (6.5f - progress)/16f, bufferIn, combinedOverlayIn);
+        }
+
+        if(!outputItem.isEmpty()) {
+            renderItem(context, outputItem, 1.5f/16f, bufferIn, combinedOverlayIn);
         }
 
         matrixStackIn.pop();
@@ -126,5 +146,24 @@ public class RunePressTileEntityRenderer extends TileEntityRenderer<TileEntityRu
         crankCubes[4].excludeFacesByDirection(Direction.EAST);
 
         return crankCubes;
+    }
+
+    private void renderItem (RenderContext context, final ItemStack stack, final float yPos, IRenderTypeBuffer buffer, int combinedOverlay) {
+        if(!stack.isEmpty()) {
+            context.matrixStack.push();
+            context.matrixStack.translate(0.5f, yPos, 0.5f);
+            context.matrixStack.rotate(new Quaternion(90, 0, 0, true));
+            context.matrixStack.scale(itemRenderScale, itemRenderScale, itemRenderScale);
+
+            ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+
+            if (!stack.getItem().getTags().contains(new ResourceLocation("block"))) {
+                context.matrixStack.scale(0.5f, 0.5f, 0.5f);
+            }
+
+            itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, context.combinedLightIn, combinedOverlay, context.matrixStack, buffer);
+
+            context.matrixStack.pop();
+        }
     }
 }

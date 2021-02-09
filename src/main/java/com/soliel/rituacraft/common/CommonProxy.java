@@ -6,6 +6,7 @@ import com.soliel.rituacraft.common.blocks.RegistryBlocks;
 import com.soliel.rituacraft.common.capabilities.CapabilityEssenceChunk;
 import com.soliel.rituacraft.common.capabilities.RegisterCapabilities;
 import com.soliel.rituacraft.common.commands.CommandEssence;
+import com.soliel.rituacraft.common.crafting.RegistryRecipes;
 import com.soliel.rituacraft.common.items.RegistryItems;
 import com.soliel.rituacraft.common.items.runes.RegistryRune;
 import com.soliel.rituacraft.common.rituals.RegistryRituals;
@@ -58,6 +59,7 @@ public class CommonProxy {
         RegistryRituals.RITUAL_BLOCKS.register(modEventBus);
         RegistryRune.registerRunes(RegistryItems.ITEMS);
         RegistryItems.ITEMS.register(modEventBus);
+        RegistryRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         WorldGen.FEATURES.register(modEventBus);
         WorldGen.PLACEMENTS.register(modEventBus);
         modEventBus.addGenericListener(Item.class, this::onItemsRegistry);
