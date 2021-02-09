@@ -1,0 +1,16 @@
+{
+  "block.rituacraft.essence_nexus": "Essence Nexus",
+  "item.rituacraft.chalk": "Chalk",
+  "item.rituacraft.ritual_chalk": "Ritual Chalk",
+  "item.rituacraft.rune_attraction": "Rune of Attraction",
+  "item.rituacraft.rune_attraction_depowered": "Mundane Rune of Attraction",
+  "item.rituacraft.rune_energy": "Rune of Energy",
+  "item.rituacraft.rune_energy_depowered": "Mundane Rune of Energy",
+  "item.rituacraft.rune_fire": "Rune of Fire",
+  "item.rituacraft.rune_fire_depowered": "Mundane Rune of Fire",
+  "item.rituacraft.rune_structure": "Rune of Structure",
+  "item.rituacraft.rune_structure_depowered": "Mundane Rune of Structure",
+  "item.rituacraft.rune_transport": "Rune of Transport",
+  "item.rituacraft.rune_transport_depowered": "Mundane Rune of Transport",
+  "itemGroup.rituacraft": "Rituacraft"
+}

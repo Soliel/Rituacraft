@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "rituacraft:item/rune_structure_depowered"
+  }
+}
