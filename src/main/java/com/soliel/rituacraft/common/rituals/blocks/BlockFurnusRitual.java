@@ -67,7 +67,7 @@ public class BlockFurnusRitual extends Block {
         TileFurnusRitual ritualTile = (TileFurnusRitual) worldIn.getTileEntity(pos);
         if (ritualTile == null) return ActionResultType.SUCCESS;
 
-        if(player.isSneaking()) {
+        if(player.isSneaking() && !worldIn.isRemote()) {
             ItemHandlerHelper.giveItemToPlayer(player, ritualTile.extractFromInputSlot(64));
         } else {
             ItemHandlerHelper.giveItemToPlayer(player, ritualTile.extractFromOutputSlot(64));
