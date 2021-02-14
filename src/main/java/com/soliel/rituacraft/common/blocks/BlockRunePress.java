@@ -47,10 +47,14 @@ public class BlockRunePress extends Block {
         ItemStack item = player.getHeldItem(handIn);
 
         if(tile != null) {
-            if(item != ItemStack.EMPTY && !worldIn.isRemote()) {
+            if(item != ItemStack.EMPTY) {
                 ItemStack insertResult = tile.insertItem(item, true);
                 if(insertResult != item) {
                     tile.insertItem(item.split(1), false);
+                    if(worldIn.isRemote) {
+                        worldIn.notifyBlockUpdate(pos, state, state, 3);
+                    }
+
                     return ActionResultType.SUCCESS;
                 }
             }
@@ -60,6 +64,9 @@ public class BlockRunePress extends Block {
                     ItemHandlerHelper.giveItemToPlayer(player, tile.grabResultItem());
                 } else {
                     ItemHandlerHelper.giveItemToPlayer(player, tile.grabMaterialItem());
+                }
+                if(worldIn.isRemote) {
+                    worldIn.notifyBlockUpdate(pos, state, state, 3);
                 }
                 return ActionResultType.SUCCESS;
             }

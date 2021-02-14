@@ -23,3 +23,6 @@ run
 
 # Files from Forge MDK
 forge*changelog.txt
+
+# Files to exclude cause I pollute my dev directory with relevant stuff
+McAssets
